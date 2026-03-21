@@ -4,8 +4,11 @@ import { db } from "@/lib/firebase-admin";
 
 export async function POST(req: Request) {
   try {
+    if (!db) {
+      return NextResponse.json({ error: "Database not initialized" }, { status: 500 });
+    }
     const { email, otp } = await req.json();
-
+    
     if (!email || !otp) {
       return NextResponse.json({ error: "Email and OTP are required" }, { status: 400 });
     }

@@ -7,6 +7,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
+    if (!db) {
+      return NextResponse.json({ error: "Database not initialized" }, { status: 500 });
+    }
     const { email } = await req.json();
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

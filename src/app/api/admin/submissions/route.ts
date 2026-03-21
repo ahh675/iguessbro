@@ -4,6 +4,11 @@ import { db } from "@/lib/firebase-admin";
 // GET: List all submissions from Firestore
 export async function GET() {
   try {
+    if (!db) {
+      console.warn("Firestore DB not initialized. Returning empty submissions.");
+      return NextResponse.json({ submissions: [] });
+    }
+
     const snapshot = await db.collection("submissions")
       .orderBy("createdAt", "desc")
       .get();
@@ -31,6 +36,10 @@ export async function GET() {
 // PATCH: Update submission status in Firestore
 export async function PATCH(req: Request) {
   try {
+    if (!db) {
+      return NextResponse.json({ error: "Database not initialized" }, { status: 500 });
+    }
+
     const { id, status } = await req.json();
 
     if (!id || !status) {
