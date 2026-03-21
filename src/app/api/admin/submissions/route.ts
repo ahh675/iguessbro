@@ -13,7 +13,7 @@ export async function GET() {
       .orderBy("createdAt", "desc")
       .get();
 
-    const submissions = snapshot.docs.map(doc => {
+    const submissions = snapshot.docs.map((doc: any) => {
       const data = doc.data();
       return {
         ...data,
