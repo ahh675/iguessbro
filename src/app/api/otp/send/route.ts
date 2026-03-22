@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     // Send the OTP via Resend
     if (resend) {
       try {
-        await resend.emails.send({
+        const { data, error } = await resend.emails.send({
           from: "we build <onboarding@resend.dev>",
           to: email,
           subject: `${otp} is your verification code`,
@@ -54,13 +54,30 @@ export async function POST(req: Request) {
             </div>
           `,
         });
-        console.log(`✅ Resend: OTP ${otp} sent to ${email}`);
+
+        if (error) {
+          console.error("Resend API Error details:", error);
+          // Still return success:false but with the specific error if safe
+          return NextResponse.json({ 
+            success: false, 
+            error: `Email delivery failed: ${error.message || 'Unknown error'}. Please check if your email is correct.` 
+          }, { status: 500 });
+        }
+
+        console.log(`✅ Resend: OTP ${otp} sent successfully to ${email}. ID: ${data?.id}`);
       } catch (emailError: any) {
-        console.error("Resend Email Error:", emailError.message || emailError);
-        console.log(`🔐 DEBUG OTP for ${email}: ${otp}`);
+        console.error("Resend Exception:", emailError.message || emailError);
+        return NextResponse.json({ 
+          success: false, 
+          error: "An unexpected error occurred while sending the email. Please try again later." 
+        }, { status: 500 });
       }
     } else {
       console.log(`🔐 DEBUG OTP for ${email}: ${otp} (Resend disabled)`);
+      return NextResponse.json({ 
+        success: false, 
+        error: "Email service is currently unavailable. No API key configured." 
+      }, { status: 503 });
     }
 
     return NextResponse.json({ success: true, message: "OTP sent successfully" });

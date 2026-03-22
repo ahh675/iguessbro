@@ -121,8 +121,12 @@ export function MultiStepForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email }),
       });
-      if (!res.ok) throw new Error("Failed to send OTP");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send OTP");
+      if (data.success === false) throw new Error(data.error || "Failed to send OTP");
+      
       setOtpSent(true);
+      setOtpError(""); // Clear any previous errors on success
     } catch (err: any) {
       setOtpError(err.message);
     } finally {
@@ -218,6 +222,9 @@ export function MultiStepForm() {
                         </Button>
                       )}
                     </div>
+                    {!isEmailVerified && otpError && !otpSent && (
+                      <p className="text-red-500 text-xs mt-1 px-1 font-medium">{otpError}</p>
+                    )}
                   </div>
 
                   <AnimatePresence>
