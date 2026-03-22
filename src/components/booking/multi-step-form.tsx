@@ -122,8 +122,14 @@ export function MultiStepForm() {
         body: JSON.stringify({ email: formData.email }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send OTP");
-      if (data.success === false) throw new Error(data.error || "Failed to send OTP");
+      if (!res.ok) {
+        const fullError = data.details ? `${data.error}: ${data.details}` : (data.error || "Failed to send OTP");
+        throw new Error(fullError);
+      }
+      if (data.success === false) {
+        const fullError = data.details ? `${data.error}: ${data.details}` : (data.error || "Failed to send OTP");
+        throw new Error(fullError);
+      }
       
       setOtpSent(true);
       setOtpError(""); // Clear any previous errors on success

@@ -85,15 +85,15 @@ function FeatureCard({ icon, title, description, index }: any) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: isEven ? -100 : 100, scale: 0.9, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-      viewport={{ once: false, margin: "-50px" }}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ 
-        duration: 1.2, 
+        duration: 0.8, 
         delay: index * 0.1, 
-        ease: [0.16, 1, 0.3, 1] 
+        ease: "easeOut" 
       }}
-      className="p-10 rounded-[3rem] bg-white/40 border border-rose-500/10 backdrop-blur-xl hover:bg-white hover:border-rose-500/30 hover:shadow-2xl hover:shadow-rose-500/10 transition-all duration-700 group relative overflow-hidden"
+      className="p-10 rounded-[3rem] bg-white border border-zinc-100 backdrop-blur-xl hover:shadow-2xl hover:shadow-zinc-200/50 transition-all duration-700 group relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       
