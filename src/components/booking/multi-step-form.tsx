@@ -131,7 +131,7 @@ export function MultiStepForm() {
   };
 
   const handleVerifyOtp = async () => {
-    if (otp.length !== 6) return;
+    if (otp.length !== 4) return;
     setIsVerifyingOtp(true);
     setOtpError("");
     try {
@@ -229,15 +229,15 @@ export function MultiStepForm() {
                         className="space-y-2 overflow-hidden"
                       >
                         <label className="text-sm font-medium leading-none text-foreground flex justify-between">
-                          Enter 6-digit OTP
+                          Enter 4-digit OTP
                           {otpError && <span className="text-red-500 text-xs">{otpError}</span>}
                         </label>
                         <div className="flex gap-2">
                           <input
                             type="text"
-                            maxLength={6}
+                            maxLength={4}
                             className={`flex h-14 w-full rounded-2xl border ${otpError ? 'border-red-500' : 'border-zinc-200'} bg-slate-50 px-4 text-center text-xl font-bold tracking-[0.8em] text-zinc-900 shadow-sm transition-all focus:border-zinc-950 outline-none`}
-                            placeholder="000000"
+                            placeholder="0000"
                             value={otp}
                             onChange={(e) => {
                               setOtp(e.target.value);
